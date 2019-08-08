@@ -10,22 +10,59 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var taskModel = Task.allTasks
+//    var taskModel = Task.allTasks
+    
+    var notStarted = Task.notStartedFunc()
+    var inProgress = Task.inProgressFunc()
+    var completed = Task.completedTasksFunc()
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskModel.count
+        switch section {
+        case 0:
+            return notStarted.count
+        case 1:
+            return inProgress.count
+        case 2:
+            return completed.count
+        default:
+            return 0
+            
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let name = tableView.dequeueReusableCell(withIdentifier: "Names", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Names", for: indexPath)
         if indexPath.section == 0 {
-            name.textLabel?.text = taskModel[indexPath.row].name
-            name.detailTextLabel?.text = taskModel[indexPath.row].dueDate.description(with: .current)
-            
+            cell.textLabel?.text = notStarted[indexPath.row].name
+            cell.detailTextLabel?.text = notStarted[indexPath.row].dueDate.description(with: .current)
+        } else if  indexPath.section == 1 {
+            cell.textLabel?.text = inProgress[indexPath.row].name
+            cell.detailTextLabel?.text = inProgress[indexPath.row].dueDate.description(with: .current)
+        } else {
+            cell.textLabel?.text = completed[indexPath.row].name
+            cell.detailTextLabel?.text = completed[indexPath.row].dueDate.description(with: .current)
         }
-        return name
+        return cell
     }
     
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 0:
+            return "Not Started"
+        case 1:
+            return "In Progress"
+        case 2:
+            return "Completed"
+        default:
+            return "What Happen?"
+        }
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
+    }
 
 
     @IBOutlet weak var myTableView: UITableView!
@@ -34,6 +71,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
            myTableView.dataSource = self
+        myTableView.delegate = self
         
         // Do any additional setup after loading the view.
     }
