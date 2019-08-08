@@ -20,7 +20,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let name = tableView.dequeueReusableCell(withIdentifier: "Names", for: indexPath)
         if indexPath.section == 0 {
             name.textLabel?.text = taskModel[indexPath.row].name
-            name.detailTextLabel?.text = taskModel[indexPath.row].dueDate.description
+            name.detailTextLabel?.text = taskModel[indexPath.row].dueDate.description(with: .current)
             
         }
         return name
